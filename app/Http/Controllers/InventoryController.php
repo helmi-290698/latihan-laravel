@@ -57,7 +57,8 @@ class InventoryController extends Controller
      */
     public function show(Inventory $inventory)
     {
-        //
+        $inventory = Inventory::all();
+        return response()->json(['inventory' => $inventory]);
     }
 
     /**

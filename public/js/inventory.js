@@ -94,6 +94,7 @@ $("#form-update-inventory").on("submit", function(e) {
            console.log(data);
             if (data.status == 0) {
                 $.each(data.error, function (prefix, val) {
+                    
                     $("input[name='"+prefix+"']").addClass("is-invalid");
                     $("select[name='"+prefix+"']").addClass("is-invalid");
                     $("textarea[name='"+prefix+"']").addClass("is-invalid");

@@ -26,16 +26,20 @@ Route::get('/', function () {
 Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['auth', 'verified'])->name('inventory');
 Route::middleware('auth')->group(function () {
     Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
+    Route::get('/inventory/show', [InventoryController::class, 'show'])->name('inventory.show');
     Route::patch('/inventory', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
     Route::patch('/sales', [SalesController::class, 'update'])->name('sales.update');
     Route::delete('/sales', [SalesController::class, 'destroy'])->name('sales.destroy');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
+    Route::post('/purchase', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');
 });
 
 Route::middleware('auth')->group(function () {

@@ -12,7 +12,8 @@
         <div class="card-header  d-flex align-items-center justify-content-between">
             <h5 class="h5 mt-2">Data {{ $title }}</h5>
             <div class="float-end">
-                <a href="#" class="btn btn-primary"><i class="mdi mdi-plus m-0"></i> {{ $title }}</a>
+                <a href="{{ route('purchase.create') }}" class="btn btn-primary"><i class="mdi mdi-plus m-0"></i>
+                    {{ $title }}</a>
             </div>
         </div>
         <div class="card-body">
@@ -37,5 +38,5 @@
     <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script>
     {{ $dataTable->scripts() }}
 
-    <script src="{{ asset('js/sales.js') }}"></script>
+    <script src="{{ asset('js/purchase.js') }}"></script>
 @endpush
