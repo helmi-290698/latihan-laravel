@@ -49,7 +49,7 @@
                     <h5 class="h5">Data {{ $title }}</h5>
                 </div>
                 <div class="card-body">
-                    {{-- {{ $dataTable->table() }} --}}
+                    {{ $dataTable->table() }}
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
-    {{-- {{ $dataTable->scripts() }} --}}
+    {{ $dataTable->scripts() }}
 
     <script src="{{ asset('js/inventory.js') }}"></script>
 @endpush

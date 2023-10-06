@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\PurchaseDataTable;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 
@@ -10,10 +11,10 @@ class PurchaseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PurchaseDataTable $datatable)
     {
         $title = 'Purchase';
-        return view('admin.purchase', ['title' => $title]);
+        return $datatable->render('admin.purchase', ['title' => $title]);
     }
 
     /**

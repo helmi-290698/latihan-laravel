@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\InventoryDataTable;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
 
@@ -10,10 +11,10 @@ class InventoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(InventoryDataTable $datatable)
     {
         $title = 'Inventory';
-        return view('admin.inventory', ['title' => $title]);
+        return $datatable->render('admin.inventory', ['title' => $title]);
     }
 
     /**
