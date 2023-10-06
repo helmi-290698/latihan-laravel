@@ -25,6 +25,11 @@ Route::get('/', function () {
 
 Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['auth', 'verified'])->name('inventory');
 Route::middleware('auth')->group(function () {
+    Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
+    Route::patch('/inventory', [InventoryController::class, 'update'])->name('inventory.update');
+    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+});
+Route::middleware('auth')->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::patch('/sales', [SalesController::class, 'update'])->name('sales.update');
     Route::delete('/sales', [SalesController::class, 'destroy'])->name('sales.destroy');

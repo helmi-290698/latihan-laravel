@@ -22,7 +22,22 @@ class InventoryDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'action')
+            ->addColumn('action', function ($data) {
+                $csrf =  csrf_token();
+                $btn = '<div class="btn-group">
+                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">Action</button>
+                <ul class="dropdown-menu">
+                  <li>  <button type="button" class="dropdown-item mb-2 open_edit_inventory" value="' . $data->id . '" data-name="' . $data->name . '" data-code="' . $data->code . '" data-price="' . $data->price . '" data-stock="' . $data->stock . '"><i class="mdi mdi-square-edit-outline text-warning"></i> Ubah</button> </li>
+                  <li>  <form action="/inventory/' . $data->id . '" method="POST" id="form-delete-inventory">
+                  <input type="hidden" name="_token" value="' . $csrf . '">
+                  <input type="hidden" name="_method" value="delete" />
+                    <button class="dropdown-item" ><i class="mdi mdi-delete text-danger"></i> Hapus</button>
+                  </form> </li>
+                </ul>
+              </div>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
             ->setRowId('id');
     }
 
@@ -49,6 +64,7 @@ class InventoryDataTable extends DataTable
             ->parameters([
                 'dom'          => 'Bfrtip',
                 'buttons'      => ['excel', 'pdf', 'csv'],
+                'scrollX'      => true,
 
             ]);
     }

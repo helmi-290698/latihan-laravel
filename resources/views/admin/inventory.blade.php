@@ -14,27 +14,32 @@
                     <h5 class="h5"> Input Data {{ $title }}</h5>
                 </div>
                 <div class="card-body">
-                    <form action="">
+                    <form action="{{ route('inventory.store') }}" method="post" id="form-input-inventory">
                         @csrf
                         <div class="form-floating form-floating-outline mb-3">
                             <input class="form-control" id="code" type="text" name="code" placeholder="Code"
                                 autofocus />
                             <label for="code">Code</label>
+                            <span class="text-danger code_error"></span>
                         </div>
+
                         <div class="form-floating form-floating-outline mb-3">
                             <input class="form-control" id="name" type="text" name="name" placeholder="Name"
                                 autofocus />
                             <label for="name">Name</label>
+                            <span class="text-danger name_error"></span>
                         </div>
                         <div class="form-floating form-floating-outline mb-3">
                             <input class="form-control" id="price" type="text" name="price" placeholder="Price"
                                 autofocus />
                             <label for="Price">Price</label>
+                            <span class="text-danger price_error"></span>
                         </div>
                         <div class="form-floating form-floating-outline mb-3">
                             <input class="form-control" id="stock" type="text" name="stock" placeholder="Stock"
                                 autofocus />
                             <label for="stock">Stock</label>
+                            <span class="text-danger stock_error"></span>
                         </div>
                         <div class="float-end">
                             <button type="submit" class="btn btn-primary">Simpan</button>
@@ -60,7 +65,7 @@
     {{-- @include('pages.jabatan.modals.tambah-jabatan') --}}
     {{-- End modal tambah jabatan --}}
     {{-- Start modal ubah jabatan --}}
-    {{-- @include('pages.jabatan.modals.ubah-jabatan') --}}
+    @include('admin.modals.update-inventory')
     {{-- End modal ubah jabatan --}}
 @endsection
 
