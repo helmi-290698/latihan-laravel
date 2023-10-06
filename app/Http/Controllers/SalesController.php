@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SalesDataTable;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,10 @@ class SalesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(SalesDataTable $datatable)
     {
-        //
+        $title = 'Sales';
+        return $datatable->render('admin.sales', ['title' => $title]);
     }
 
     /**

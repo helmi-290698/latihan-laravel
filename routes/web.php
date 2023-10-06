@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SalesController;
+use App\Models\Inventory;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,12 +20,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['auth', 'verified'])->name('inventory');
+Route::middleware('auth')->group(function () {
+    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::patch('/sales', [SalesController::class, 'update'])->name('sales.update');
+    Route::delete('/sales', [SalesController::class, 'destroy'])->name('sales.destroy');
+});
+Route::middleware('auth')->group(function () {
+    Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,4 +39,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

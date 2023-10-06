@@ -12,7 +12,8 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Purchase';
+        return view('admin.purchase', ['title' => $title]);
     }
 
     /**

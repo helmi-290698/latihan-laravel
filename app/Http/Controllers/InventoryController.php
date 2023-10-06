@@ -12,7 +12,8 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Inventory';
+        return view('admin.inventory', ['title' => $title]);
     }
 
     /**
