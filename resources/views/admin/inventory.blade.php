@@ -3,6 +3,7 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endpush
 
 @section('content')
@@ -81,4 +82,5 @@
     {{ $dataTable->scripts() }}
 
     <script src="{{ asset('js/inventory.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endpush

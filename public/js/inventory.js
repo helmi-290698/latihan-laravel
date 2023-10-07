@@ -22,7 +22,15 @@ $("#form-input-inventory").on("submit", function(e) {
                 });
             } else {
                 
-                toastr.success(data.message);
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon:'success',
+                    customClass: {
+                      confirmButton: 'btn btn-primary waves-effect waves-light'
+                    },
+                    buttonsStyling: false
+                  })
                 $('#inventory-table').DataTable().ajax.reload();
                 
             }
@@ -50,7 +58,15 @@ $(document).on("submit", "#form-delete-inventory", function(e) {
                 });
             } else {
                 
-                toastr.success('Data Berhasil Dihapus !!');
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon:'success',
+                    customClass: {
+                      confirmButton: 'btn btn-primary waves-effect waves-light'
+                    },
+                    buttonsStyling: false
+                  })
                 $('#inventory-table').DataTable().ajax.reload();
             }
         },
@@ -103,7 +119,15 @@ $("#form-update-inventory").on("submit", function(e) {
                 });
             } else {
                 
-                toastr.success(data.message);
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon:'success',
+                    customClass: {
+                      confirmButton: 'btn btn-primary waves-effect waves-light'
+                    },
+                    buttonsStyling: false
+                  })
                 $('#inventory-table').DataTable().ajax.reload();
                 $('#modalEditInventory').modal('hide');
 
