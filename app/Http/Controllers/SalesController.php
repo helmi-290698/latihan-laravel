@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesDataTable;
+use App\Models\Inventory;
+use App\Models\Sale_detail;
 use App\Models\Sales;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class SalesController extends Controller
 {
@@ -22,7 +26,8 @@ class SalesController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Sales';
+        return view('admin.create-sales', ['title' => $title]);
     }
 
     /**
@@ -30,7 +35,48 @@ class SalesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId = Auth::user()->id;
+        $validatedData = Validator::make($request->all(), [
+            'inventory_id.*' => 'required|max:255',
+            'qty.*' => 'required|max:255',
+            'price.*' => 'required',
+            'date' => 'required',
+        ]);
+
+        if ($validatedData->fails()) {
+            return response()->json(['status' => 0, 'error' => $validatedData->errors()]);
+        }
+        $lastSales = Sales::latest()->first();
+
+        if ($lastSales) {
+            // Lakukan sesuatu dengan data terakhir, misalnya:
+            $number = $lastSales->number + 1;
+            // ...
+        } else {
+            $number = 0;
+        }
+        $arrayIdSales = [];
+        foreach ($request->inventory_id as $key => $value) {
+            $number++;
+            $sales =  Sales::create([
+                'number' => $number,
+                'date' => $request->date,
+                'user_id' => $userId,
+            ]);
+            Sale_detail::create([
+                'sale_id' => $sales->id,
+                'inventory_id' => $request->inventory_id[$key],
+                'qty' => $request->qty[$key],
+                'price' => $request->price[$key],
+
+            ]);
+            $arrayIdSales[] = $sales->id;
+            $decrementInventory = Inventory::where('id', $request->inventory_id[$key])->increment('stock', $request->qty[$key]);
+        }
+
+        $detailSales = Sales::with(['user'])->where('user_id', $userId)->first();
+        $arraySales = Sale_detail::with(['inventory'])->whereIn('sale_id', $arrayIdSales)->get();
+        return response()->json(['status' => 1, 'detailsales' => $detailSales, 'arraysales' => $arraySales, 'message' => 'Data Added successfully!']);
     }
 
     /**
@@ -54,14 +100,38 @@ class SalesController extends Controller
      */
     public function update(Request $request, Sales $sales)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'inventory_id' => 'required|max:255',
+            'qty' => 'required|max:255',
+            'price' => 'required',
+            'date' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['status' => 0, 'error' => $validated->errors()]);
+        }
+
+        $salesDetail = Sale_detail::where('id',  $request->id)->first();
+        $sales = Sales::where('id',  $salesDetail->sale_id)->update([
+            'date' => $request->date,
+        ]);
+        $salesDetail->update([
+            'inventory_id' => $request->inventory_id,
+            'qty' => $request->qty,
+            'price' => $request->price,
+        ]);
+        return response()->json(['status' => 1, 'message' => 'Updated Data successfully!']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sales $sales)
+    public function destroy($id)
     {
-        //
+        Sales::where('id', '=', $id)->delete();
+        $salesDetail = Sale_detail::where('sale_id', '=', $id)->first();
+        Inventory::where('id', $salesDetail->inventory_id)->decrement('stock',  $salesDetail->qty);
+        $salesDetail->delete();
+        return response()->json(['status' => true, 'message' => 'Delete data Successfully!']);
     }
 }

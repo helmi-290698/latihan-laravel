@@ -33,9 +33,10 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
-    Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
+    Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::patch('/sales', [SalesController::class, 'update'])->name('sales.update');
-    Route::delete('/sales', [SalesController::class, 'destroy'])->name('sales.destroy');
+    Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
+    Route::delete('/sales/{id}', [SalesController::class, 'destroy'])->name('sales.destroy');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');

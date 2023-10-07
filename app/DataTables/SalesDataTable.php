@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Sales;
 use App\DataTables\Dompdf;
+use App\Models\Sale_detail;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -23,14 +24,43 @@ class SalesDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'sales.action')
+            ->addColumn('action', function ($data) {
+                $csrf =  csrf_token();
+                $btn = '<div class="btn-group">
+            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">Action</button>
+            <ul class="dropdown-menu">
+              <li>  <button type="button" class="dropdown-item mb-2 open_edit_sales" value="' . $data->id . '" data-inventory="' . $data->inventory_id . '" data-qty="' . $data->qty . '" data-price="' . $data->price . '" data-date="' . $data->sale->date . '"><i class="mdi mdi-square-edit-outline text-warning"></i> Ubah</button> </li>
+              <li>  <form action="/sales/' . $data->sale_id . '" method="POST" id="form-delete-sales">
+              <input type="hidden" name="_token" value="' . $csrf . '">
+              <input type="hidden" name="_method" value="delete" />
+                <button class="dropdown-item" ><i class="mdi mdi-delete text-danger"></i> Hapus</button>
+              </form> </li>
+            </ul>
+          </div>';
+                return $btn;
+            })
+            ->addColumn('name', function ($data) {
+                return $data->sale->user->name;
+            })
+            ->addColumn('number', function ($data) {
+                return $data->sale->number;
+            })
+            ->addColumn('date', function ($data) {
+                return $data->sale->date;
+            })
+            ->addColumn('inventory', function ($data) {
+                return $data->inventory->name;
+            })
+            ->addColumn('price', function ($data) {
+                return 'Rp. ' . $data->price;
+            })
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Sales $model): QueryBuilder
+    public function query(Sale_detail $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -50,6 +80,7 @@ class SalesDataTable extends DataTable
             ->parameters([
                 'dom'          => 'Bfrtip',
                 'buttons'      => ['excel', 'pdf', 'csv'],
+                'scrollX'      => true,
 
             ]);
     }
@@ -60,11 +91,13 @@ class SalesDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
             Column::make('number'),
+            Column::make('name'),
             Column::make('date'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('inventory')->title('nama_barang'),
+            Column::make('qty'),
+            Column::make('price'),
+            Column::make('action'),
         ];
     }
 

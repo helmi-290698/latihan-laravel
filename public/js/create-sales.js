@@ -112,7 +112,7 @@ $("body").on("click",".remove",function(){
     $(this).parents(".control-group").remove();
 });
 
-$("#form-input-purchase").on("submit", function(e) {
+$("#form-input-sales").on("submit", function(e) {
     
     e.preventDefault();
     $.ajax({
@@ -154,16 +154,16 @@ $("#form-input-purchase").on("submit", function(e) {
           
                   <dl class="row mb-2">
                         <dt class="col-4">Nama</dt>
-                        <dd class="col-8">: ${data.detailpurchase.user.name}</dd>
+                        <dd class="col-8">: ${data.detailsales.user.name}</dd>
 
                         <dt class="col-4">Tanggal</dt>
-                        <dd class="col-8">: ${data.detailpurchase.date}</dd>
+                        <dd class="col-8">: ${data.detailsales.date}</dd>
                         <dt class="col-4">Barang</dt>
                         <dd class="col-8">: </dd>
                     </dl>
                   `);
                  
-                  data.arraypurchase.forEach(val => {
+                  data.arraysales.forEach(val => {
                     $('#content').append(`
                             <dd class="col-12 mt-2">
                                 <div class="row">
@@ -178,12 +178,12 @@ $("#form-input-purchase").on("submit", function(e) {
                   $('#footer').html(`
                             <hr>
                             <dl class="row mb-2">
-                            <dt class="col-4">Total Biaya</dt>
+                            <dt class="col-4">Total Pendapatan</dt>
                             <dd class="col-8 d-flex justify-content-end"> Rp. </dd>
                             </dl>
                   `);
                 // toastr.success(data.message);
-                // window.location.href = url+"/purchase";
+                // window.location.href = url+"/sales";
                 
             }
         },
