@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\PurchaseDataTable;
+use App\Models\Inventory;
 use App\Models\Purchase;
 use App\Models\Purchase_detail;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class PurchaseController extends Controller
         } else {
             $number = 0;
         }
-
+        $arrayIdPurchase = [];
         foreach ($request->inventory_id as $key => $value) {
             $number++;
             $purchase =  Purchase::create([
@@ -69,10 +70,13 @@ class PurchaseController extends Controller
                 'price' => $request->price[$key],
 
             ]);
+            $arrayIdPurchase[] = $purchase->id;
+            $decrementInventory = Inventory::where('id', $request->inventory_id[$key])->decrement('stock', $request->qty[$key]);
         }
 
-
-        return response()->json(['status' => 1, 'message' => 'Data Added successfully!']);
+        $detailPurchase = Purchase::with(['user'])->where('user_id', $userId)->first();
+        $arrayPurchase = Purchase_detail::with(['inventory'])->whereIn('purchase_id', $arrayIdPurchase)->get();
+        return response()->json(['status' => 1, 'detailpurchase' => $detailPurchase, 'arraypurchase' => $arrayPurchase, 'message' => 'Data Added successfully!']);
     }
 
     /**
@@ -96,14 +100,38 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'inventory_id' => 'required|max:255',
+            'qty' => 'required|max:255',
+            'price' => 'required',
+            'date' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['status' => 0, 'error' => $validated->errors()]);
+        }
+
+        $purchaseDetail = Purchase_detail::where('id',  $request->id)->first();
+        $purchase = Purchase::where('id',  $purchaseDetail->purchase_id)->update([
+            'date' => $request->date,
+        ]);
+        $purchaseDetail->update([
+            'inventory_id' => $request->inventory_id,
+            'qty' => $request->qty,
+            'price' => $request->price,
+        ]);
+        return response()->json(['status' => 1, 'message' => 'Updated Data successfully!']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Purchase $purchase)
+    public function destroy($id)
     {
-        //
+        Purchase::where('id', '=', $id)->delete();
+        $purchaseDetail = Purchase_detail::where('purchase_id', '=', $id)->first();;
+        Inventory::where('id', $purchaseDetail->inventory_id)->increment('stock',  $purchaseDetail->qty);
+        $purchaseDetail->delete();
+        return response()->json(['status' => true, 'message' => 'Delete data Successfully!']);
     }
 }

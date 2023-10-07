@@ -27,6 +27,7 @@ Route::get('/inventory', [InventoryController::class, 'index'])->middleware(['au
 Route::middleware('auth')->group(function () {
     Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
     Route::get('/inventory/show', [InventoryController::class, 'show'])->name('inventory.show');
+    Route::get('/inventory/show/{id}', [InventoryController::class, 'showById'])->name('inventory.showbyid');
     Route::patch('/inventory', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
 });
@@ -39,7 +40,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
     Route::post('/purchase', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::patch('/purchase', [PurchaseController::class, 'update'])->name('purchase.update');
     Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');
+    Route::delete('/purchase/{id}', [PurchaseController::class, 'destroy'])->name('purchase.destroy');
 });
 
 Route::middleware('auth')->group(function () {

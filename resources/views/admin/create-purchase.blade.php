@@ -20,8 +20,8 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-floating form-floating-outline mb-3">
-                                    <select name="inventory_id[]" class="form-control select_inventory select2"
-                                        data-input-id="0">
+                                    <select name="inventory_id[]" id="inventory_id"
+                                        class="form-control select_inventory select2" data-input-id="0">
                                         <option value="">--pilih--</option>
                                     </select>
                                     <label for="Inventory">Inventory</label>
@@ -39,7 +39,7 @@
                             <div class="col-4">
                                 <div class="form-floating form-floating-outline mb-3">
                                     <input class="form-control" id="price" type="text" name="price[]"
-                                        placeholder="price" data-input-id="0" autofocus />
+                                        placeholder="price" data-input-id="0" autofocus readonly />
                                     <label for="price">Price</label>
                                     <span class="text-danger price_error" data-span-id="0"></span>
                                 </div>
@@ -74,7 +74,10 @@
                     <h5 class="h5">Riwayat {{ $title }}</h5>
                 </div>
                 <div class="card-body">
-
+                    <div id="header"></div>
+                    <dl class="row mb-2" id="content">
+                    </dl>
+                    <div id="footer"></div>
                 </div>
             </div>
         </div>
@@ -92,5 +95,5 @@
         $(".select2").select2();
     </script>
     <script src="{{ asset('js/create-purchase.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" />
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 @endpush

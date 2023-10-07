@@ -60,6 +60,11 @@ class InventoryController extends Controller
         $inventory = Inventory::all();
         return response()->json(['inventory' => $inventory]);
     }
+    public function showById($id)
+    {
+        $inventory = Inventory::find($id);
+        return response()->json(['inventory' => $inventory]);
+    }
 
     /**
      * Show the form for editing the specified resource.
