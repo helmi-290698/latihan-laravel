@@ -110,8 +110,8 @@ class SalesController extends Controller
         if ($validated->fails()) {
             return response()->json(['status' => 0, 'error' => $validated->errors()]);
         }
-
         $salesDetail = Sale_detail::where('id',  $request->id)->first();
+        Inventory::where('id', $request->inventory_id)->decrement('stock',  $salesDetail->qty);
         $sales = Sales::where('id',  $salesDetail->sale_id)->update([
             'date' => $request->date,
         ]);
@@ -120,6 +120,7 @@ class SalesController extends Controller
             'qty' => $request->qty,
             'price' => $request->price,
         ]);
+        Inventory::where('id', $request->inventory_id)->increment('stock',  $request->qty);
         return response()->json(['status' => 1, 'message' => 'Updated Data successfully!']);
     }
 

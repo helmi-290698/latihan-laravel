@@ -112,6 +112,7 @@ class PurchaseController extends Controller
         }
 
         $purchaseDetail = Purchase_detail::where('id',  $request->id)->first();
+        Inventory::where('id', $request->inventory_id)->increment('stock',  $purchaseDetail->qty);
         $purchase = Purchase::where('id',  $purchaseDetail->purchase_id)->update([
             'date' => $request->date,
         ]);
@@ -120,6 +121,7 @@ class PurchaseController extends Controller
             'qty' => $request->qty,
             'price' => $request->price,
         ]);
+        Inventory::where('id', $request->inventory_id)->decrement('stock',  $request->qty);
         return response()->json(['status' => 1, 'message' => 'Updated Data successfully!']);
     }
 
