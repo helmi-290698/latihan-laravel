@@ -35,6 +35,15 @@ class SalesController extends Controller
         $title = 'Sales';
         return view('admin.create-sales', ['title' => $title]);
     }
+    public function cetak($id)
+    {
+        if (!Auth::user()->can('print sales')) {
+            abort(403, 'UNAUTHORIZE');
+        }
+        $salesDetail = Sale_detail::with(['sale'])->find($id);
+        $title = 'Sales';
+        return view('admin.cetak-sales', ['title' => $title, 'sales_detail' => $salesDetail]);
+    }
 
     /**
      * Store a newly created resource in storage.

@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/cetak/{id}', [SalesController::class, 'cetak'])->name('sales.cetak');
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::patch('/sales', [SalesController::class, 'update'])->name('sales.update');
     Route::get('/sales/create', [SalesController::class, 'create'])->name('sales.create');
@@ -40,6 +41,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
+    Route::get('/purchase/cetak/{id}', [PurchaseController::class, 'cetak'])->name('purchase.cetak');
     Route::post('/purchase', [PurchaseController::class, 'store'])->name('purchase.store');
     Route::patch('/purchase', [PurchaseController::class, 'update'])->name('purchase.update');
     Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');

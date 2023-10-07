@@ -35,7 +35,15 @@ class PurchaseController extends Controller
         $title = 'Purchase';
         return view('admin.create-purchase', ['title' => $title]);
     }
-
+    public function cetak($id)
+    {
+        if (!Auth::user()->can('print purchase')) {
+            abort(403, 'UNAUTHORIZE');
+        }
+        $purchaseDetail = Purchase_detail::with(['purchase'])->find($id);
+        $title = 'Purchase';
+        return view('admin.cetak-purchase', ['title' => $title, 'purchase_detail' => $purchaseDetail]);
+    }
     /**
      * Store a newly created resource in storage.
      */

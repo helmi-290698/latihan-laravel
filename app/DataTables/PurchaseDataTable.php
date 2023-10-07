@@ -27,7 +27,7 @@ class PurchaseDataTable extends DataTable
             ->addColumn('action', function ($data) {
                 $csrf =  csrf_token();
                 if (Auth::user()->hasRole('Manager')) {
-                    $btn = '<a href="#" class="btn btn-icon me-2 btn-primary">
+                    $btn = '<a href="/purchase/cetak/' . $data->id . '" class="btn btn-icon me-2 btn-primary">
                                 <span class="tf-icons mdi mdi-printer"></span>
                             </a>';
                 } else {
