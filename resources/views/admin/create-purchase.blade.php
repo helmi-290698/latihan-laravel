@@ -3,6 +3,7 @@
 @push('style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }} " />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.css') }}" />
 @endpush
 
 @section('content')
@@ -91,4 +92,5 @@
         $(".select2").select2();
     </script>
     <script src="{{ asset('js/create-purchase.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}" />
 @endpush

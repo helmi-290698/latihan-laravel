@@ -102,9 +102,18 @@ $("#form-input-purchase").on("submit", function(e) {
                     $("span." + prefix + "_error").text(val[0]);
                 });
             } else {
-                
-                toastr.success(data.message);
-                $('#inventory-table').DataTable().ajax.reload();
+                Swal.fire({
+                    title: 'Good job!',
+                    text: 'You clicked the button!',
+                    type: 'success',
+                    icon:'success',
+                    customClass: {
+                      confirmButton: 'btn btn-primary waves-effect waves-light'
+                    },
+                    buttonsStyling: false
+                  })
+                // toastr.success(data.message);
+                window.location.href = url+"/purchase";
                 
             }
         },
