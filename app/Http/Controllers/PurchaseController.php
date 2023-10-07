@@ -17,6 +17,9 @@ class PurchaseController extends Controller
      */
     public function index(PurchaseDataTable $datatable)
     {
+        if (!Auth::user()->can('read purchase')) {
+            abort(403, 'UNAUTHORIZE');
+        }
         $title = 'Purchase';
         return $datatable->render('admin.purchase', ['title' => $title]);
     }
@@ -26,6 +29,9 @@ class PurchaseController extends Controller
      */
     public function create()
     {
+        if (!Auth::user()->can('create purchase')) {
+            abort(403, 'UNAUTHORIZE');
+        }
         $title = 'Purchase';
         return view('admin.create-purchase', ['title' => $title]);
     }

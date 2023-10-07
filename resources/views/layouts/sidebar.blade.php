@@ -22,23 +22,30 @@
 
     <ul class="menu-inner py-1">
         <!-- Page -->
-        <li class="menu-item {{ 'inventory' == request()->path() ? 'active' : '' }}">
-            <a href="{{ route('inventory') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-package-variant-closed"></i>
-                <div data-i18n="Page 1">Inventory</div>
-            </a>
-        </li>
-        <li class="menu-item {{ 'purchase' == request()->path() ? 'active' : '' }}">
-            <a href="{{ route('purchase.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-cart-variant"></i>
-                <div data-i18n="Page 2">Purchase</div>
-            </a>
-        </li>
-        <li class="menu-item {{ 'sales' == request()->path() ? 'active' : '' }}">
-            <a href="{{ route('sales.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons mdi mdi-sale"></i>
-                <div data-i18n="Page 2">Sale</div>
-            </a>
-        </li>
+        @can('read inventory')
+            <li class="menu-item {{ 'inventory' == request()->path() ? 'active' : '' }}">
+                <a href="{{ route('inventory') }}" class="menu-link">
+                    <i class="menu-icon tf-icons mdi mdi-package-variant-closed"></i>
+                    <div data-i18n="Page 1">Inventory</div>
+                </a>
+            </li>
+        @endcan
+        @can('read purchase')
+            <li class="menu-item {{ 'purchase' == request()->path() ? 'active' : '' }}">
+                <a href="{{ route('purchase.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons mdi mdi-cart-variant"></i>
+                    <div data-i18n="Page 2">Purchase</div>
+                </a>
+            </li>
+        @endcan
+        @can('read sales')
+            <li class="menu-item {{ 'sales' == request()->path() ? 'active' : '' }}">
+                <a href="{{ route('sales.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons mdi mdi-sale"></i>
+                    <div data-i18n="Page 2">Sale</div>
+                </a>
+            </li>
+        @endcan
+
     </ul>
 </aside>

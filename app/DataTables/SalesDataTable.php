@@ -6,6 +6,7 @@ use App\Models\Sales;
 use App\DataTables\Dompdf;
 use App\Models\Sale_detail;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -26,17 +27,24 @@ class SalesDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($data) {
                 $csrf =  csrf_token();
-                $btn = '<div class="btn-group">
-            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">Action</button>
-            <ul class="dropdown-menu">
-              <li>  <button type="button" class="dropdown-item mb-2 open_edit_sales" value="' . $data->id . '" data-inventory="' . $data->inventory_id . '" data-qty="' . $data->qty . '" data-price="' . $data->price . '" data-date="' . $data->sale->date . '"><i class="mdi mdi-square-edit-outline text-warning"></i> Ubah</button> </li>
-              <li>  <form action="/sales/' . $data->sale_id . '" method="POST" id="form-delete-sales">
-              <input type="hidden" name="_token" value="' . $csrf . '">
-              <input type="hidden" name="_method" value="delete" />
-                <button class="dropdown-item" ><i class="mdi mdi-delete text-danger"></i> Hapus</button>
-              </form> </li>
-            </ul>
-          </div>';
+                if (Auth::user()->hasRole('Manager')) {
+                    $btn = '<a href="#" class="btn btn-icon me-2 btn-primary">
+                                <span class="tf-icons mdi mdi-printer"></span>
+                            </a>';
+                } else {
+                    $btn = '<div class="btn-group">
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">Action</button>
+                    <ul class="dropdown-menu">
+                      <li>  <button type="button" class="dropdown-item mb-2 open_edit_sales" value="' . $data->id . '" data-inventory="' . $data->inventory_id . '" data-qty="' . $data->qty . '" data-price="' . $data->price . '" data-date="' . $data->sale->date . '"><i class="mdi mdi-square-edit-outline text-warning"></i> Ubah</button> </li>
+                      <li>  <form action="/sales/' . $data->sale_id . '" method="POST" id="form-delete-sales">
+                      <input type="hidden" name="_token" value="' . $csrf . '">
+                      <input type="hidden" name="_method" value="delete" />
+                        <button class="dropdown-item" ><i class="mdi mdi-delete text-danger"></i> Hapus</button>
+                      </form> </li>
+                    </ul>
+                  </div>';
+                }
+
                 return $btn;
             })
             ->addColumn('name', function ($data) {
@@ -62,7 +70,13 @@ class SalesDataTable extends DataTable
      */
     public function query(Sale_detail $model): QueryBuilder
     {
-        return $model->newQuery();
+        $userId = Auth::user()->id;
+        if (Auth::user()->hasRole('Sales')) {
+            return $model->newQuery()->join('sales', 'sales.id', '=', 'sale_details.sale_id')
+                ->where('sales.user_id', $userId);
+        } else {
+            return $model->newQuery();
+        }
     }
 
     /**

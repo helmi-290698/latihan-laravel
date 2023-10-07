@@ -17,6 +17,9 @@ class SalesController extends Controller
      */
     public function index(SalesDataTable $datatable)
     {
+        if (!Auth::user()->can('read sales')) {
+            abort(403, 'UNAUTHORIZE');
+        }
         $title = 'Sales';
         return $datatable->render('admin.sales', ['title' => $title]);
     }
@@ -26,6 +29,9 @@ class SalesController extends Controller
      */
     public function create()
     {
+        if (!Auth::user()->can('create sales')) {
+            abort(403, 'UNAUTHORIZE');
+        }
         $title = 'Sales';
         return view('admin.create-sales', ['title' => $title]);
     }

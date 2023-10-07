@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\InventoryDataTable;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
@@ -14,6 +15,9 @@ class InventoryController extends Controller
      */
     public function index(InventoryDataTable $datatable)
     {
+        if (!Auth::user()->can('read inventory')) {
+            abort(403, 'UNAUTHORIZE');
+        }
         $title = 'Inventory';
         return $datatable->render('admin.inventory', ['title' => $title]);
     }

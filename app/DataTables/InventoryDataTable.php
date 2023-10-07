@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Inventory;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -85,7 +86,8 @@ class InventoryDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-                ->addClass('text-center'),
+                ->addClass('text-center')
+                ->visible(!Auth::user()->hasRole('Manager')),
         ];
     }
 

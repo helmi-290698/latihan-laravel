@@ -13,10 +13,13 @@
     <div class="card">
         <div class="card-header  d-flex align-items-center justify-content-between">
             <h5 class="h5 mt-2">Data {{ $title }}</h5>
-            <div class="float-end">
-                <a href="{{ route('purchase.create') }}" class="btn btn-primary"><i class="mdi mdi-plus m-0"></i>
-                    {{ $title }}</a>
-            </div>
+            @can('create purchase')
+                <div class="float-end">
+                    <a href="{{ route('purchase.create') }}" class="btn btn-primary"><i class="mdi mdi-plus m-0"></i>
+                        {{ $title }}</a>
+                </div>
+            @endcan
+
         </div>
         <div class="card-body">
             {{ $dataTable->table() }}
